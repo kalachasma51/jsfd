@@ -1,0 +1,820 @@
+1a.
+
+doGet Method:
+
+@WebServlet("/labserv")
+
+public class labserv extends HttpServlet {
+
+private static final long serialVersionUID = 1L;
+
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+response.setContentType("text/html");
+
+PrintWriter out = response.getWriter();
+
+out.println("<html><body>");
+
+out.println("<h2>Submit Your Details</h2>");
+
+out.println("<form method='POST' action='labserv'>");
+
+out.println("Name: <input type='text' name='name'><br><br>");
+
+out.println("Password: <input type='password' name='password' ><br><br>");
+
+out.println("<input type='submit' value='Submit'>");
+
+out.println("</form>");
+
+out.println("</body></html>");
+
+}
+
+doPost Method:
+
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { String name= request.getParameter("name");
+
+String password= request.getParameter("password");
+
+response.setContentType("text/html");
+
+PrintWriter out = response.getWriter();
+
+out.println("<html><body>");
+
+out.println("<h2>Submitted Data</h2>");
+
+out.println("Name: " + name + "<br>");
+
+out.println("Password: " + password + "<br>");
+
+out.println("</body></html>");
+
+}
+............................................................
+1B
+...................................................
+import java.io.*; import java.util.*;
+
+import javax.servlet.*;
+
+import javax.servlet.annotation.WebServlet; import javax.servlet.http.*;
+
+@WebServlet("/Lab2serv")
+
+public class Lab2serv extends HttpServlet {
+
+private static final long serialVersionUID = 1L;
+
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { response.setContentType("text/html"); PrintWriter out = response.getWriter(); // Check if the logout action is requested String action = request.getParameter("action"); if ("logout".equals (action)) {
+
+HttpSession session = request.getSession(false); if (session != null) {
+
+}
+
+session.invalidate(); // Invalidate the session
+
+response.sendRedirect("Lab2serv"); // Redirect to the login page
+
+return;
+
+
+
+}
+
+// Check if session exists
+
+HttpSession session= request.getSession(false);
+
+if (session != null && session.getAttribute("username") != null) {
+
+// User is logged in, display welcome message and session info out.println("<html><head><title>Welcome</title> </head><body>"); out.println("<h2>Welcome," + session.getAttribute("username") + "!</h2>"); out.println("<p><a href='Lab2serv?action=logout'>Logout</a></p>");
+
+out.println("<h3>Session Information:</h3>");
+
+out.println("<p>Session ID: " + session.getId() + "</p>");
+
+out.println("<p>Creation Time: " + new Date(session.getCreation Time()) + "</p>"); out.println("<p>Last Accessed Time: " + new Date(session.getLastAccessedTime()) + "</p>"); out.println("</body></html>");
+
+}
+
+else {
+
+// User is not logged in, display login form
+
+out.println("<html><head><title>Login</title> </head><body>");
+
+out.println("<h2>Login</h2>");
+
+out.println("<form method='post' action='Lab2serv'>");
+
+out.println("Username: <input type='text' name='username'><br><br>");
+
+out.println("Password: <input type='password' name='password' ><br><br>");
+
+out.println("<input type='submit' value='Login'>");
+
+out.println("</form>");
+
+out.println("</body></html>");
+
+}
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+
+throws ServletException, IOException {
+
+// Process login form submission
+
+String username= request.getParameter("username");
+
+String password= request.getParameter("password");
+
+// For demonstration purposes, validate against hardcoded credentials
+
+if (username != null && username.equals("admin") && password != null && password.equals("password")) { // Login successful, create session and store username
+
+}
+
+HttpSession session = request.getSession (true); // create new session if not exists session.setAttribute("username", username);
+
+// Redirect to doGet to display welcome message and session info
+
+response.sendRedirect("Lab2serv");
+
+else {
+
+// Login failed, redirect back to login page 
+response.sendRedirect("Lab2serv");
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------
+2a.
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Employee Form</title>
+
+</head>
+
+<body>
+
+<h2>Employee Information Form</h2>
+
+<form action="EmpResult.jsp" method="POST">
+
+Employee ID: <input type="text" name="empid" required><br><br> Employee Name: <input type="text" name="ename" required><br><br> Employee Age: <input type="number" name="eage" required><br><br> Employee Department:
+
+<select name="edept" required>
+
+<option value="">Select</option>
+
+<option value="HR">HR</option>
+
+<option value="Finance">Finance</option>
+
+<option value="IT">IT</option>
+
+<option value="Sales">Sales</option>
+
+</select><br><br>
+
+Employee Email: <input type="email" name="email" required><br><br> <input type="submit" value="Submit">
+
+</form> </body> </html>
+
+EmpForm.jsp
+
+page language="java" contentType="text/html; charset=UTF-8"
+
+pageEncoding="UTF-8"%>
+
+<%@ page import="java.util.regex.
+
+<!DOCTYPE html>
+
+*" %>
+
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Insert title here</title>
+
+</head>
+
+<body>
+
+<h2>Employee Information Result</h2>
+
+<%
+
+// Retrieve form data
+
+String employeeId = request.getParameter("empid"); String name = request.getParameter("ename"); String ageStr = request.getParameter("eage"); String department = request.getParameter("edept"); String email = request.getParameter("email");
+
+// Initialize error messages
+
+String employeeIdError = String nameError = "";
+
+String ageError = "";
+
+String departmentError = ""; String emailError = "";
+
+;
+
+// Validation flags boolean isValid = true;
+
+EmpResult.jsp
+
+// Validate Employee ID
+
+if (employeeId == null || employeeId.trim().isEmpty())
+
+{
+
+}
+
+employeeIdError = "Employee ID is required.";
+
+isValid = false;
+
+// Validate Name
+
+if (name == null || !name.matches("^[a-zA-Z\\s]+$"))
+
+{
+
+}
+
+nameError = "Name must contain only letters and spaces."; isValid = false;
+
+// Validate Age
+
+int age = 0;
+
+try {
+
+age = Integer.parseInt(ageStr);
+
+if (age 18 || age > 65)
+
+{
+
+}
+
+ageError = "Age must be between 18 and 65."; isValid = false;
+
+catch (NumberFormatException e) {
+
+ageError = "Age must be a valid numeric value."; isValid = false;
+
+}
+
+EmpResult.jsp
+
+// Validate Department
+
+if (department == null || department.trim().isEmpty())
+
+{
+
+}
+
+departmentError = "Department is required."; isValid = false;
+
+else if (!department.matches("HR | Finance | IT | Sales")) { departmentError = "Invalid department selected.";
+
+}
+
+isValid = false;
+
+// Validate Email
+
+if (email == null || !email.matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) { emailError="Email must be in a valid format (e.g., name@example.com)."; isValid = false;
+
+if (isValid)
+
+{
+
+// Process data
+
+int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR);
+
+int birthYear = currentYear age;
+
+String nameAndDepartment = name + " (" + department + ")";
+
+// Format email
+
+String formattedEmail = email.toLowerCase();
+
+%>
+
+
+if (isValid)
+
+// Process data
+
+%>
+
+int currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR); int birthYear = currentYear - age;
+
+"
+
+String nameAndDepartment = name + (" + department + ")"; // Format email
+
+String formattedEmail = email.toLowerCase();
+
+<table border="1">
+
+<tr>
+
+<th>Employee ID</th>
+
+<td><%= employeeId %></td>
+
+</tr>
+
+<tr>
+
+<th>Name and Department</th>
+
+<td><%= nameAndDepartment %></td>
+
+</tr>
+
+<tr>
+
+<th>Birth Year</th>
+
+<td><%= birthYear %></td>
+
+</tr>
+
+<tr>
+
+<th>Formatted Email</th>
+
+<td><%= formattedEmail %></td>
+
+</tr>
+
+</table>
+
+<% }
+
+EmpResult.jsp
+
+else {
+
+// Display error messages and guide the user
+
+%>
+
+<h3>Validation Errors</h3>
+
+<ul>
+
+<% if (!employeeIdError.isEmpty()) { %>
+
+<li><b>Employee ID: </b> <%= employeeIdError %></li>
+
+<% } %>
+
+<% if (!nameError.isEmpty()) { %>
+
+<li><b>Name:</b> <%= name Error %></li>
+
+<% } %>
+
+<% if (!ageError.isEmpty()) { %>
+
+<li><b>Age:</b> <%= ageError %></li>
+
+<% } %>
+
+<% if (!departmentError.isEmpty()) { %>
+
+<li><b>Department: </b> <%= departmentError %></li>
+
+<% } %>
+
+<% if (!emailError.isEmpty()) { %>
+
+<li><b>Email:</b> <%= emailError %></li>
+
+<% } %>
+
+</ul>
+
+<!--<a href="employeeForm.jsp">Go back to the form</a>--> <a href="Employee Form.jsp">Go back to the form</a>
+
+<%
+
+} %>
+
+</body> </html>
+
+-------------------------------------------------------------------------------------------------------
+4....
+Class:
+Book.java
+package com.example.demo;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+@Entity
+public class Book {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+Long id;
+String name;
+String author;
+int price;
+public Book() {
+// TODO Auto-generated constructor stub
+}
+public Long getId() {
+return id;
+}
+public void setId(Long id) {
+this.id = id;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getAuthor() {
+return author;
+}
+public void setAuthor(String author) {
+this.author = author;
+}
+public int getPrice() {
+return price;
+}
+public void setPrice(int price) {
+this.price = price;
+}
+@Override
+public String toString() {
+return "Book [id=" + id + ", name=" + name + ", author=" + author +
+", price =" + price + "]";
+}
+}
+Interface:
+BookRepository.java
+package com.example.demo;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface BookRepository extends JpaRepository<Book, Long> {
+}
+Class:
+BookManager.java
+package com.example.demo;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
+public class BookManager {
+@Autowired
+BookRepository repository;
+public List<Book> getAllBook(){
+return repository.findAll();
+}
+public void saveBook(Book b) {
+repository.save(b);
+}
+public Book getBookById(Long id) {
+return repository.findById(id).get();
+}
+public void deleteBook(Long id) {
+repository.deleteById(id);
+}
+}
+Class
+AppController.java
+package com.example.demo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+@Controller
+public class AppController {
+@Autowired
+BookManager manager;
+@GetMapping("/")
+public String showHomePage(Model model) {
+model.addAttribute("booklist",manager.getAllBook());
+return "index";
+}
+@GetMapping("/new")
+public String showCreatePage() {
+return "create_book";
+}
+@PostMapping("/save")
+public String saveBook(@ModelAttribute Book book) {
+manager.saveBook(book);
+return "redirect:/";
+}
+@GetMapping("/edit/{id}")
+public String editBook(@PathVariable Long id, Model model) {
+model.addAttribute("book", manager.getBookById(id));
+return "edit_book";
+}
+@GetMapping("/delete/{id}")
+public String deleteBook(@PathVariable Long id, Model model) {
+manager.deleteBook(id);
+return "redirect:/";
+}
+}
+index.html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<div align="center">
+<h1>Book List</h1>
+<br/>
+<a href="/new">Add New Book</a>
+<table border="1" cellpadding="10" cellspacing="0">
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Author</th>
+<th>Price</th>
+<th>Action</th>
+</tr>
+<tr th:each ="book:${booklist}">
+<td th:text="${book.id}"/>
+<td th:text="${book.name}"/>
+<td th:text="${book.author}"/>
+<td th:text="${book.price}"/>
+<td>
+<a th:href="@{'/edit/' + ${book.id}}">Edit</a>
+<a th:href="@{'/delete/' + ${book.id}}">Delete</a>
+</td>
+</tr>
+</table>
+</div>
+</body>
+</html>
+create_book.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<div align="center">
+<h1>Add New Book</h1>
+<br/>
+<form action="/save" method="post">
+Book Name: <Input type="text" name="name"/><br><br>
+Author: <Input type="text" name="author"/><br><br>
+Price <Input type="text" name="price"/><br><br>
+<button type="submit">Save</button>
+</form>
+</div>
+</body>
+</html>
+edit_book.html
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<div align="center">
+<h1>Edit Book</h1>
+<br/>
+<form action="#" th:action="@{/save}" th:object="${book}" method="post">
+ID : <input type="text" th:field="*{id}" readonly="readonly"/><br><br>
+Name: <input type="text" th:field="*{name}"/><br><br>
+Author: <input type="text" th:field="*{author}"/><br><br>
+Price :<input type="text" th:field="*{price}"/><br><br>
+<button type="submit">Save</button>
+</form>
+</div>
+</body>
+</html>
+
+Update : application.properties
+spring.datasource.url=jdbc:mysql://localhost:3306/DB_NAME
+spring.datasource.username=root
+spring.datasource.password=root123
+MySql Terminal
+1. Create DB:
+create database Test_Spring;
+2. Create Table
+create table book(id integer NOT NULL AUTO_INCREMENT primary key,name
+varchar(20),author varchar(20),price integer);
+
+
+----------------------------------------------------------------------------------------
+
+5....
+
+Mobile.java
+package com.example.demo;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+@Entity
+public class Mobile {
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+Long id;
+String name;
+String model;
+String ossystem;
+int price;
+public Mobile() {
+// TODO Auto-generated constructor stub
+}
+public Long getId() {
+return id;
+}
+public void setId(Long id) {
+this.id = id;
+}
+public String getName() {
+return name;
+}
+public void setName(String name) {
+this.name = name;
+}
+public String getModel() {
+return model;
+}
+public void setModel(String model) {
+this.model = model;
+}
+public String getOssystem() {
+return ossystem;
+}
+public void setOssystem(String ossystem) {
+this.ossystem = ossystem;
+}
+public int getPrice() {
+return price;
+}
+public void setPrice(int price) {
+this.price = price;
+}
+}
+MobileRepository.java
+package com.example.demo;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface MobileRepository extends JpaRepository<Mobile, Long> {
+}
+MobileManager.java
+package com.example.demo;
+import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+@Service
+public class MobileManager {
+@Autowired
+MobileRepository repository;
+public List<Mobile> getAllMobile(){
+return repository.findAll();
+}
+public void saveMobile(Mobile b) {
+repository.save(b);
+}
+public Mobile getMobileById(Long id) {
+return repository.findById(id).get();
+}
+public void deleteMobile(Long id) {
+repository.deleteById(id);
+}
+public Boolean exists(Long id)
+{
+return repository.existsById(id);
+}
+}
+AppController.java
+package com.example.demo;
+import java.util.List;
+import java.util.NoSuchElementException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class AppController {
+@Autowired
+MobileManager manager;
+@GetMapping("/mobile")
+public List<Mobile> listAllMobile()
+{
+return manager.getAllMobile();
+}
+@GetMapping("/mobile/{id}")
+public ResponseEntity<Mobile> getMobile(@PathVariable Long id)
+{
+try
+{
+Mobile mobile = manager.getMobileById(id);
+return new ResponseEntity<Mobile>(mobile,HttpStatus.OK);
+}
+catch(NoSuchElementException e)
+{
+return new ResponseEntity<Mobile>(HttpStatus.NOT_FOUND);
+}
+}
+@PostMapping("/mobile")
+public void saveMobile(@RequestBody Mobile mobile)
+{
+manager.saveMobile(mobile);
+}
+@PutMapping("/mobile")
+public void updateMobile(@RequestBody Mobile mobile)
+{
+manager.saveMobile(mobile);
+}
+@DeleteMapping("/mobile/{id}")
+public ResponseEntity<Mobile> DeleteMobile(@PathVariable Long id)
+{
+if(manager.exists(id))
+{
+manager.deleteMobile(id);
+return new ResponseEntity<Mobile>(HttpStatus.OK);
+}
+else
+return new ResponseEntity<Mobile>(HttpStatus.NOT_FOUND);
+}
+}
+Applicaton.properties
+spring.datasource.url=jdbc:mysql://localhost:3306/student
+spring.datasource.username=root
+spring.datasource.password=root123
+MySql Terminal
+1. Create DB:
+create database student;
+2. Create Table
+create table mobile(id integer NOT NULL AUTO_INCREMENT primary key,name
+varchar(20),model varchar(20),ossystem varchar(20),price integer);
+Execute and Run
+Open Terminal
+1. Display the existing table details : curl -X GET http://localhost:8080/mobile
+Output:
+2. Insert a new tuple: curl -X POST -H "Content-Type:application/json" -d
+"{\"name\":\"phone2\",\"model\":\"a2\",\"ossystem\":\"os2\”,\"price\":5000}"
+http://localhost:8080/mobile
+3. Display the table details after insert operation: curl -X GET
+http://localhost:8080/mobile
+4. Insert :
+curl -X POST -H "Content-Type:application/json" -d
+"{\"name\":\"phone3\",\"model\":\"a3\",\"ossystem\":\"os3\",\"price\":8000}"
+http://localhost:8080/mobile
+5. Display the table details after insert operation : curl -X GET
+http://localhost:8080/mobile
+6. Update: Update “phone1” with new details
+curl -X PUT -H "Content-Type:application/json" -d
+"{\"id\":1,\"name\":\"phone1\",\"model\":\"a90\",\"ossystem\":\"os90\",\"price\":9000}"
+http://localhost:8080/mobile
+7.Display the table details after update operation: curl -X GET
+http://localhost:8080/mobile
+8.Delete a tuple from the table: curl -X DELETE http://localhost:8080/mobile/3
+9.Display the table details after the delete operation: curl -X GET
+http://localhost:8080/mobile
+10. Delete a tuple which is not there in the table : curl -X DELETE
+http://localhost:8080/mobile/6
